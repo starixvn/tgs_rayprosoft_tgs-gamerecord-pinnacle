@@ -8,6 +8,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 ARG BuildConfiguration=Release
 WORKDIR /src
+COPY ["nuget.config", "."]
 COPY ["Tgs.GameRecord.Pinnacle/Tgs.GameRecord.Pinnacle.csproj", "Tgs.GameRecord.Pinnacle/"]
 COPY ["Tgs.GameRecord.Pinnacle.Core/Tgs.GameRecord.Pinnacle.Core.csproj", "Tgs.GameRecord.Pinnacle.Core/"]
 RUN dotnet restore "Tgs.GameRecord.Pinnacle/Tgs.GameRecord.Pinnacle.csproj"
