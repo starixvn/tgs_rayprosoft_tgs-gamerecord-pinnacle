@@ -16,7 +16,7 @@ public class PinnacleController : ControllerBase
     public PinnacleController(
         IOptions<GameRecordInfoOptions> options)
     {
-        _gameRecordInfo = options.Value; ;
+        _gameRecordInfo = options.Value;
     }
 
     /// <summary>
