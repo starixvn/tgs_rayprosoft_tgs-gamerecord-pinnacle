@@ -25,57 +25,64 @@ internal class UtensilRepository : IUtensil
         _absoluteExpirationRelativeToNow = absoluteExpirationRelativeToNow;
     }
 
-    public async ValueTask<Guid?> GetBrandGameProviderConfigurationIdAsync(
+    public async ValueTask<Guid> GetBrandGameProviderConfigurationIdAsync(
         Guid brandId,
         Guid gameProviderId,
         CancellationToken cancellationToken = default)
     {
         var key = $"gamerecord:{_gameRecordInfo.GameProviderCode}:{brandId}:{gameProviderId}";
 
-        if (!_memoryCache.TryGetValue(key, out Guid? gameProviderConfigurationId))
+        if (!_memoryCache.TryGetValue(key, out Guid gameProviderConfigurationId))
         {
             gameProviderConfigurationId = await _client
                 .BrandGetGameProviderConfigurationIdAsync(
                     brandId: brandId,
                     gameProviderId: gameProviderId,
                     cancellationToken: cancellationToken)
-                .ConfigureAwait(false);
+                .ConfigureAwait(false)
+                ?? throw new Exception($"This platform configuration does not exist.({brandId})");
 
-            if (gameProviderConfigurationId.HasValue)
-            {
-                return _memoryCache
-                    .Set(
-                        key: key,
-                        value: gameProviderConfigurationId,
-                        absoluteExpirationRelativeToNow: _absoluteExpirationRelativeToNow);
-            }
+            return _memoryCache
+                .Set(
+                key: key,
+                value: gameProviderConfigurationId,
+                absoluteExpirationRelativeToNow: _absoluteExpirationRelativeToNow);
         }
         return gameProviderConfigurationId;
     }
+
+    public string GetExternalGameId()
+        => _gameRecordInfo.GameExternalId;
 
     public async ValueTask<int> GetGameIdAsync(
         CancellationToken cancellationToken = default)
     {
         var gameProviderId = await GetGameProviderIdAsync(
-                cancellationToken: cancellationToken)
+            cancellationToken: cancellationToken)
             .ConfigureAwait(false);
-        var key = $"gamerecord:{_gameRecordInfo.GameProviderCode}:{gameProviderId}:{_gameRecordInfo.GameExternalId}";
-        if (!_memoryCache.TryGetValue(key, out int gameId))
+
+        var gameExternalId = _gameRecordInfo.GameExternalId;
+
+        var key = $"gamerecord:{_gameRecordInfo.GameProviderCode}:{gameProviderId}:{gameExternalId}";
+        if (!_memoryCache.TryGetValue(key, out int? gameId))
         {
             gameId = await _client
                 .GameGetIdAsync(
-                    gameProviderId: gameProviderId,
-                    gameExternalId: _gameRecordInfo.GameExternalId,
-                    cancellationToken: cancellationToken)
+                gameProviderId: gameProviderId,
+                gameExternalId: gameExternalId,
+                cancellationToken: cancellationToken)
                 .ConfigureAwait(false)
-                ?? throw new Exception($"This game does not exist.({_gameRecordInfo.GameExternalId})");
+                ?? throw new Exception($"This game does not exist.({gameExternalId})");
 
-            return _memoryCache
-                .Set(
+            if (gameId.HasValue)
+            {
+                return _memoryCache
+                    .Set(
                     key: key,
-                    value: gameId);
+                    value: gameId.Value);
+            }
         }
-        return gameId;
+        return gameId ?? throw new Exception($"This game does not exist.({gameExternalId})");
     }
 
     public string GetGameProviderCode()
@@ -99,7 +106,7 @@ internal class UtensilRepository : IUtensil
         return gameProviderId;
     }
 
-    public async ValueTask<PlayerInfo?> GetPlayerAsync(
+    public async ValueTask<PlayerInfo> GetPlayerAsync(
         string playerCode,
         CancellationToken cancellationToken = default)
     {
@@ -110,17 +117,15 @@ internal class UtensilRepository : IUtensil
                 .PlayerGetAsync(
                     playerCode: playerCode,
                     cancellationToken: cancellationToken)
-                .ConfigureAwait(false);
+                .ConfigureAwait(false)
+                ?? throw new Exception($"This player does not exist({playerCode})");
 
-            if (playerModel is not null)
-            {
-                return _memoryCache
-                    .Set(
-                        key: key,
-                        value: playerModel,
-                        absoluteExpirationRelativeToNow: _absoluteExpirationRelativeToNow);
-            }
+            return _memoryCache
+                .Set(
+                key: key,
+                value: playerModel,
+                absoluteExpirationRelativeToNow: _absoluteExpirationRelativeToNow);
         }
-        return playerModel;
+        return playerModel ?? throw new Exception($"This player does not exist({playerCode})");
     }
 }

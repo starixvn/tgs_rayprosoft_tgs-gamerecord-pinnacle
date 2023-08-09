@@ -16,8 +16,7 @@ public class SchedulePullRecordCommandServiceUnitTest
     {
         var fakeLogger = NullLogger<SchedulePullRecordCommandService>.Instance;
         var fakeClient = Substitute.For<IGameInterfacePinnacleClient>();
-        var fakeGameRecordUtensil = Substitute.For<IGameRecordUtensil>();
-        var fakeService = Substitute.For<ICommandService<ScheduleHandleRecordCommand>>();
+        var fakeService = Substitute.For<ICommandService<HandleRecordCommand>>();
 
         var command = new SchedulePullRecordCommand(
             ApiUrl: new("http://localhost/"),
@@ -30,7 +29,6 @@ public class SchedulePullRecordCommandServiceUnitTest
         var service = new SchedulePullRecordCommandService(
             fakeLogger,
             fakeClient,
-            fakeGameRecordUtensil,
             fakeService);
 
         await service

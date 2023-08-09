@@ -32,9 +32,7 @@ public static class ServiceCollectionExtensions
             .AddGameRoundsScheduleClient(gameRoundsScheduleClientOptions)
             .AddGameInterfacePinnacleClient(gameInterfacePinnacleClientOptions)
             .AddGameRoundsWorkClient()
-            .AddGameRoundsWorkManualClient()
             .AddSingleton<IScheduleFormDispatcher, ScheduleFormDispatcher>()
             .AddSingleton<IScheduleFormLock>(sp => ActivatorUtilities.CreateInstance<ScheduleFormLock>(sp, sp.GetRequiredService<RedisConnectionManager>().Database))
-            .AddTransient<IUtensil>(sp => ActivatorUtilities.CreateInstance<UtensilRepository>(sp, TimeSpan.FromHours(1)))
-            .AddSingleton<IGameRecordUtensil, GameRecordUtensil>();
+            .AddTransient<IUtensil>(sp => ActivatorUtilities.CreateInstance<UtensilRepository>(sp, TimeSpan.FromHours(1)));
 }

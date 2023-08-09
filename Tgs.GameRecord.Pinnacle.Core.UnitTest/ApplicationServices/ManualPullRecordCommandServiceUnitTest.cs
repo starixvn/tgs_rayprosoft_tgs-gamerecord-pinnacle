@@ -16,8 +16,7 @@ public class ManualPullRecordCommandServiceUnitTest
     {
         var fakeLogger = NullLogger<ManualPullRecordCommandService>.Instance;
         var fakeClient = Substitute.For<IGameInterfacePinnacleClient>();
-        var fakeGameRecordUtensil = Substitute.For<IGameRecordUtensil>();
-        var fakeService = Substitute.For<ICommandService<ManualHandleRecordCommand>>();
+        var fakeService = Substitute.For<ICommandService<HandleRecordCommand>>();
 
         var command = new ManualPullRecordCommand(
             ApiUrl: new("http://localhost/"),
@@ -30,7 +29,6 @@ public class ManualPullRecordCommandServiceUnitTest
         var service = new ManualPullRecordCommandService(
             fakeLogger,
             fakeClient,
-            fakeGameRecordUtensil,
             fakeService);
 
         await service

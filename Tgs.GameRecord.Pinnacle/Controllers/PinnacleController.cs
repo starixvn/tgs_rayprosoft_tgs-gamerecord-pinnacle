@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Tgs.GameRecord.Pinnacle.Core;
+using Tgs.GameRecord.Pinnacle.ViewModels;
 using Tgs.GameRounds.Schedule.Client;
 using Tgs.GameRounds.Schedule.Protos;
-using Tgs.GameRecord.Pinnacle.ViewModels;
 
 namespace Tgs.GameRecord.Pinnacle.Controllers;
 

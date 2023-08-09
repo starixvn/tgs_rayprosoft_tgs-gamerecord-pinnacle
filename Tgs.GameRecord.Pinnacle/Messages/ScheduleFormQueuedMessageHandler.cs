@@ -1,6 +1,6 @@
-﻿using Tgs.GameRounds.Schedule.Common.Protos;
+﻿using Tgs.GameRecord.Pinnacle.Core;
+using Tgs.GameRounds.Schedule.Common.Protos;
 using Tgs.MessageQueue;
-using Tgs.GameRecord.Pinnacle.Core;
 
 namespace Tgs.GameRecord.Pinnacle.Messages;
 
