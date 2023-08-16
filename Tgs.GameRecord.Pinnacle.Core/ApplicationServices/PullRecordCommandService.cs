@@ -6,14 +6,14 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.Pinnacle.Core.ApplicationServices;
 
-internal class ManualPullRecordCommandService : ICommandService<ManualPullRecordCommand>
+internal class PullRecordCommandService : ICommandService<PullRecordCommand>
 {
     private readonly IGameInterfacePinnacleClient _client;
-    private readonly ILogger<ManualPullRecordCommandService> _logger;
+    private readonly ILogger<PullRecordCommandService> _logger;
     private readonly ICommandService<HandleRecordCommand> _service;
 
-    public ManualPullRecordCommandService(
-        ILogger<ManualPullRecordCommandService> logger,
+    public PullRecordCommandService(
+        ILogger<PullRecordCommandService> logger,
         IGameInterfacePinnacleClient client,
         ICommandService<HandleRecordCommand> service)
     {
@@ -22,7 +22,7 @@ internal class ManualPullRecordCommandService : ICommandService<ManualPullRecord
         _service = service ?? throw new ArgumentNullException(nameof(service));
     }
 
-    public async ValueTask ExecuteAsync(ManualPullRecordCommand command, CancellationToken cancellationToken = default)
+    public async ValueTask ExecuteAsync(PullRecordCommand command, CancellationToken cancellationToken = default)
     {
         var gameRecords = await _client
             .GameRecordAsync(

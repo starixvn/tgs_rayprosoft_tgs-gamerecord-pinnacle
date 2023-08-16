@@ -1,6 +1,6 @@
 ﻿namespace Tgs.GameRecord.Pinnacle.Core.ApplicationServices;
 
-public record ManualPullRecordCommand(
+public record PullRecordCommand(
     Uri ApiUrl,
     string AgentCode,
     string AgentKey,

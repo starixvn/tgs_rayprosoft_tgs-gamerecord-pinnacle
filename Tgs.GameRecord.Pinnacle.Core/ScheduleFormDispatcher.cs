@@ -14,22 +14,19 @@ internal class ScheduleFormDispatcher : IScheduleFormDispatcher
 {
     private readonly IGameRoundsScheduleClient _client;
     private readonly ILogger<ScheduleFormDispatcher> _logger;
-    private readonly ICommandService<ManualPullRecordCommand> _manualService;
     private readonly IScheduleFormLock _scheduleFormLock;
-    private readonly ICommandService<SchedulePullRecordCommand> _scheduleService;
+    private readonly ICommandService<PullRecordCommand> _service;
 
     public ScheduleFormDispatcher(
         ILogger<ScheduleFormDispatcher> logger,
         IGameRoundsScheduleClient client,
         IScheduleFormLock scheduleFormLock,
-        ICommandService<SchedulePullRecordCommand> scheduleService,
-        ICommandService<ManualPullRecordCommand> manualService)
+        ICommandService<PullRecordCommand> service)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _scheduleFormLock = scheduleFormLock ?? throw new ArgumentNullException(nameof(scheduleFormLock));
-        _scheduleService = scheduleService ?? throw new ArgumentNullException(nameof(scheduleService));
-        _manualService = manualService ?? throw new ArgumentNullException(nameof(manualService));
+        _service = service ?? throw new ArgumentNullException(nameof(service));
     }
 
     public async ValueTask ExecuteAsync(
@@ -75,42 +72,21 @@ internal class ScheduleFormDispatcher : IScheduleFormDispatcher
             var parameter = JsonSerializer.Deserialize<PinnacleParameter>(scheduleForm.Parameters)
                 ?? throw new Exception($"This game provider ({gameProviderCode}) scheduling form parameter is null. ({id})");
 
-            if (scheduleForm.Source == ScheduleFormSource.Schedule)
-            {
-                var command = new SchedulePullRecordCommand(
-                    ApiUrl: new Uri(parameter.ApiUrl),
-                    AgentCode: parameter.AgentCode,
-                    AgentKey: parameter.AgentKey,
-                    SecretKey: parameter.SecretKey,
-                    StartTime: parameter.StartTime.ToDateTimeOffset(),
-                    EndTime: parameter.EndTime.ToDateTimeOffset());
+            var command = new PullRecordCommand(
+                ApiUrl: new Uri(parameter.ApiUrl),
+                AgentCode: parameter.AgentCode,
+                AgentKey: parameter.AgentKey,
+                SecretKey: parameter.SecretKey,
+                StartTime: parameter.StartTime.ToDateTimeOffset(),
+                EndTime: parameter.EndTime.ToDateTimeOffset());
 
-                _logger.LogDebug("LogOn:{logOn} execute the command:{command}", DateTime.Now.ToString("o"), command);
+            _logger.LogDebug("LogOn:{logOn} execute the command:{command}", DateTime.Now.ToString("o"), command);
 
-                await _scheduleService
-                    .ExecuteAsync(
-                        command: command,
-                        cancellationToken: cancellationToken)
-                    .ConfigureAwait(false);
-            }
-            else
-            {
-                var command = new ManualPullRecordCommand(
-                    ApiUrl: new Uri(parameter.ApiUrl),
-                    AgentCode: parameter.AgentCode,
-                    AgentKey: parameter.AgentKey,
-                    SecretKey: parameter.SecretKey,
-                    StartTime: parameter.StartTime.ToDateTimeOffset(),
-                    EndTime: parameter.EndTime.ToDateTimeOffset());
-
-                _logger.LogDebug("LogOn:{logOn} execute the command:{command}", DateTime.Now.ToString("o"), command);
-
-                await _manualService
-                    .ExecuteAsync(
-                        command: command,
-                        cancellationToken: cancellationToken)
-                    .ConfigureAwait(false);
-            }
+            await _service
+                .ExecuteAsync(
+                command: command,
+                cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
 
             await _client
                 .ScheduleFormCompleteAsync(

@@ -17,22 +17,21 @@ public static class ServiceCollectionExtensions
         Action<GameRoundsScheduleClientOptions, IServiceProvider> gameRoundsScheduleClientOptions,
         Action<GameInterfacePinnacleClientOptions, IServiceProvider> gameInterfacePinnacleClientOptions)
         => services
-            .AddOptions<RedisOptions>()
-            .Configure(redisDBconfigure)
-            .Services
-            .AddOptions<GameRecordInfoOptions>()
-            .Configure(gameRecordInfoOptions)
-            .Services
-            .RegisterAllServiceUtilityTypes(
-                Assembly.GetExecutingAssembly(),
-                ServiceLifetime.Transient)
-            .AddMemoryCache()
-            .AddSingleton<RedisConnectionManager>()
-            .AddGameCommandClient(gameCommandClientOptions)
-            .AddGameRoundsScheduleClient(gameRoundsScheduleClientOptions)
-            .AddGameInterfacePinnacleClient(gameInterfacePinnacleClientOptions)
-            .AddGameRoundsWorkClient()
-            .AddSingleton<IScheduleFormDispatcher, ScheduleFormDispatcher>()
-            .AddSingleton<IScheduleFormLock>(sp => ActivatorUtilities.CreateInstance<ScheduleFormLock>(sp, sp.GetRequiredService<RedisConnectionManager>().Database))
-            .AddTransient<IUtensil>(sp => ActivatorUtilities.CreateInstance<UtensilRepository>(sp, TimeSpan.FromHours(1)));
+        .AddOptions<RedisOptions>()
+        .Configure(redisDBconfigure)
+        .Services
+        .AddOptions<GameRecordInfoOptions>()
+        .Configure(gameRecordInfoOptions)
+        .Services
+        .RegisterAllServiceUtilityTypes(
+            Assembly.GetExecutingAssembly(),
+            ServiceLifetime.Transient)
+        .AddMemoryCache()
+        .AddSingleton<RedisConnectionManager>()
+        .AddGameCommandClient(gameCommandClientOptions)
+        .AddGameRoundsScheduleClient(gameRoundsScheduleClientOptions)
+        .AddGameInterfacePinnacleClient(gameInterfacePinnacleClientOptions)
+        .AddGameRecordHandleClient()
+        .AddSingleton<IScheduleFormDispatcher, ScheduleFormDispatcher>()
+        .AddSingleton<IScheduleFormLock>(sp => ActivatorUtilities.CreateInstance<ScheduleFormLock>(sp, sp.GetRequiredService<RedisConnectionManager>().Database));
 }

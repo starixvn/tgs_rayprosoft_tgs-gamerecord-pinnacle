@@ -14,11 +14,11 @@ public class SchedulePullRecordCommandServiceUnitTest
     [Fact]
     public async Task Normal_Process()
     {
-        var fakeLogger = NullLogger<SchedulePullRecordCommandService>.Instance;
+        var fakeLogger = NullLogger<PullRecordCommandService>.Instance;
         var fakeClient = Substitute.For<IGameInterfacePinnacleClient>();
         var fakeService = Substitute.For<ICommandService<HandleRecordCommand>>();
 
-        var command = new SchedulePullRecordCommand(
+        var command = new PullRecordCommand(
             ApiUrl: new("http://localhost/"),
             AgentCode: "agentCode",
             AgentKey: "agentKey",
@@ -26,7 +26,7 @@ public class SchedulePullRecordCommandServiceUnitTest
             StartTime: DateTimeOffset.UtcNow.AddMinutes(-10),
             EndTime: DateTimeOffset.UtcNow);
 
-        var service = new SchedulePullRecordCommandService(
+        var service = new PullRecordCommandService(
             fakeLogger,
             fakeClient,
             fakeService);
