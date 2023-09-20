@@ -16,7 +16,7 @@ data:
       "GameRecord": {
         "GameCommandClientBaseUrl": "http://game-gamecommand/",
         "GameRoundsScheduleClientBaseUrl": "http://game-gamerounds-schedule:9090/",
-        "GameInterfaceClientBaseUrl": "dns:///game-gameinterface-pinnacle:9090/"
+        "GameInterfaceClientBaseUrl": "http://game-gameinterface-pinnacle:9090/"
       }
     }
   otel-collector-config.yaml: |
