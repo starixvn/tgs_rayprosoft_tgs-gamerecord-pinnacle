@@ -42,31 +42,34 @@ public class HandleRecordCommandServiceUnitTest
             gameRecordInfo,
             fakeClient);
 
-        await service
-            .ExecuteAsync(
-                command)
-            .ConfigureAwait(false);
+        await service.ExecuteAsync(command);
 
         await fakeClient
             .Received(1)
             .MessageAsync(
-                gameProviderCode: Arg.Is(gameRecordInfo.Value.GameProviderCode),
-                externalRoundId: Arg.Is(command.Info.ExternalRoundId),
-                externalGameId: Arg.Is(gameRecordInfo.Value.GameExternalId),
-                playerCode: Arg.Is(command.Info.PlayerCode),
-                status: Arg.Is(GameRecordStatus.Closed),
-                clientStatus: Arg.Is(GameRecordClientStatus.Loss),
-                externalCreatedOn: Arg.Is(command.Info.ExternalCreatedOn.ToDateTimeOffset()),
-                externalClosedOn: Arg.Is(command.Info.ExternalClosedOn.ToDateTimeOffset()),
-                bet: Arg.Is(command.Info.Bet.ToDecimal().GetValueOrDefault(0)),
-                validBet: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
-                settle: Arg.Is(command.Info.Settle.ToDecimal().GetValueOrDefault(0)),
-                commission: Arg.Is(0.0m),
-                turnover: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
-                playerWinLoss: Arg.Is(command.Info.WinLoss.ToDecimal().GetValueOrDefault(0)),
-                additionalData: Arg.Is(command.Info.AdditionalData),
-                cancellationToken: Arg.Any<CancellationToken>())
-            .ConfigureAwait(false);
+            gameProviderCode: Arg.Is(gameRecordInfo.Value.GameProviderCode),
+            playerCode: Arg.Is(command.Info.PlayerCode),
+            wagerState: Arg.Is(WagerStates.Lose),
+            wagerType: Arg.Is(WagerTypes.Normal),
+            freeGameState: Arg.Is(FreeGameStates.None),
+            gambleState: Arg.Is(GambleStates.None),
+            cashoutState: Arg.Is(CashoutStates.None),
+            resettleState: Arg.Is(ResettleStates.None),
+            externalRoundId: Arg.Is(command.Info.ExternalRoundId),
+            externalWagerId: Arg.Is(command.Info.ExternalRoundId),
+            externalGameId: Arg.Is(gameRecordInfo.Value.GameExternalId),
+            externalCreatedOn: Arg.Is(command.Info.ExternalCreatedOn.ToDateTimeOffset()),
+            externalClosedOn: Arg.Is(command.Info.ExternalClosedOn.ToDateTimeOffset()),
+            externalPayoffOn: Arg.Is(command.Info.ExternalClosedOn.ToDateTimeOffset()),
+            externalResettleOn: Arg.Is(DateTimeOffset.UnixEpoch),
+            bet: Arg.Is(command.Info.Bet.ToDecimal().GetValueOrDefault(0)),
+            validBet: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
+            settle: Arg.Is(command.Info.Settle.ToDecimal().GetValueOrDefault(0)),
+            commission: Arg.Is(0.0m),
+            turnover: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
+            winLoss: Arg.Is(command.Info.WinLoss.ToDecimal().GetValueOrDefault(0)),
+            additionalData: Arg.Is(command.Info.AdditionalData),
+            cancellationToken: Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -101,31 +104,34 @@ public class HandleRecordCommandServiceUnitTest
             gameRecordInfo,
             fakeClient);
 
-        await service
-            .ExecuteAsync(
-                command)
-            .ConfigureAwait(false);
+        await service.ExecuteAsync(command);
 
         await fakeClient
             .Received(1)
             .MessageAsync(
-                gameProviderCode: Arg.Is(gameRecordInfo.Value.GameProviderCode),
-                externalRoundId: Arg.Is(command.Info.ExternalRoundId),
-                externalGameId: Arg.Is(gameRecordInfo.Value.GameExternalId),
-                playerCode: Arg.Is(command.Info.PlayerCode),
-                status: Arg.Is(GameRecordStatus.Closed),
-                clientStatus: Arg.Is(GameRecordClientStatus.Void),
-                externalCreatedOn: Arg.Is(command.Info.ExternalCreatedOn.ToDateTimeOffset()),
-                externalClosedOn: Arg.Is(command.Info.ExternalClosedOn.ToDateTimeOffset()),
-                bet: Arg.Is(command.Info.Bet.ToDecimal().GetValueOrDefault(0)),
-                validBet: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
-                settle: Arg.Is(command.Info.Settle.ToDecimal().GetValueOrDefault(0)),
-                commission: Arg.Is(0.0m),
-                turnover: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
-                playerWinLoss: Arg.Is(command.Info.WinLoss.ToDecimal().GetValueOrDefault(0)),
-                additionalData: Arg.Is(command.Info.AdditionalData),
-                cancellationToken: Arg.Any<CancellationToken>())
-            .ConfigureAwait(false);
+            gameProviderCode: Arg.Is(gameRecordInfo.Value.GameProviderCode),
+            playerCode: Arg.Is(command.Info.PlayerCode),
+            wagerState: Arg.Is(WagerStates.Void),
+            wagerType: Arg.Is(WagerTypes.Normal),
+            freeGameState: Arg.Is(FreeGameStates.None),
+            gambleState: Arg.Is(GambleStates.None),
+            cashoutState: Arg.Is(CashoutStates.None),
+            resettleState: Arg.Is(ResettleStates.None),
+            externalRoundId: Arg.Is(command.Info.ExternalRoundId),
+            externalWagerId: Arg.Is(command.Info.ExternalRoundId),
+            externalGameId: Arg.Is(gameRecordInfo.Value.GameExternalId),
+            externalCreatedOn: Arg.Is(command.Info.ExternalCreatedOn.ToDateTimeOffset()),
+            externalClosedOn: Arg.Is(command.Info.ExternalClosedOn.ToDateTimeOffset()),
+            externalPayoffOn: Arg.Is(command.Info.ExternalClosedOn.ToDateTimeOffset()),
+            externalResettleOn: Arg.Is(DateTimeOffset.UnixEpoch),
+            bet: Arg.Is(command.Info.Bet.ToDecimal().GetValueOrDefault(0)),
+            validBet: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
+            settle: Arg.Is(command.Info.Settle.ToDecimal().GetValueOrDefault(0)),
+            commission: Arg.Is(0.0m),
+            turnover: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
+            winLoss: Arg.Is(command.Info.WinLoss.ToDecimal().GetValueOrDefault(0)),
+            additionalData: Arg.Is(command.Info.AdditionalData),
+            cancellationToken: Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -160,31 +166,34 @@ public class HandleRecordCommandServiceUnitTest
             gameRecordInfo,
             fakeClient);
 
-        await service
-            .ExecuteAsync(
-                command)
-            .ConfigureAwait(false);
+        await service.ExecuteAsync(command);
 
         await fakeClient
             .Received(1)
             .MessageAsync(
-                gameProviderCode: Arg.Is(gameRecordInfo.Value.GameProviderCode),
-                externalRoundId: Arg.Is(command.Info.ExternalRoundId),
-                externalGameId: Arg.Is(gameRecordInfo.Value.GameExternalId),
-                playerCode: Arg.Is(command.Info.PlayerCode),
-                status: Arg.Is(GameRecordStatus.Closed),
-                clientStatus: Arg.Is(GameRecordClientStatus.Win),
-                externalCreatedOn: Arg.Is(command.Info.ExternalCreatedOn.ToDateTimeOffset()),
-                externalClosedOn: Arg.Is(command.Info.ExternalClosedOn.ToDateTimeOffset()),
-                bet: Arg.Is(command.Info.Bet.ToDecimal().GetValueOrDefault(0)),
-                validBet: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
-                settle: Arg.Is(command.Info.Settle.ToDecimal().GetValueOrDefault(0)),
-                commission: Arg.Is(0.0m),
-                turnover: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
-                playerWinLoss: Arg.Is(command.Info.WinLoss.ToDecimal().GetValueOrDefault(0)),
-                additionalData: Arg.Is(command.Info.AdditionalData),
-                cancellationToken: Arg.Any<CancellationToken>())
-            .ConfigureAwait(false);
+            gameProviderCode: Arg.Is(gameRecordInfo.Value.GameProviderCode),
+            playerCode: Arg.Is(command.Info.PlayerCode),
+            wagerState: Arg.Is(WagerStates.Win),
+            wagerType: Arg.Is(WagerTypes.Normal),
+            freeGameState: Arg.Is(FreeGameStates.None),
+            gambleState: Arg.Is(GambleStates.None),
+            cashoutState: Arg.Is(CashoutStates.None),
+            resettleState: Arg.Is(ResettleStates.None),
+            externalRoundId: Arg.Is(command.Info.ExternalRoundId),
+            externalWagerId: Arg.Is(command.Info.ExternalRoundId),
+            externalGameId: Arg.Is(gameRecordInfo.Value.GameExternalId),
+            externalCreatedOn: Arg.Is(command.Info.ExternalCreatedOn.ToDateTimeOffset()),
+            externalClosedOn: Arg.Is(command.Info.ExternalClosedOn.ToDateTimeOffset()),
+            externalPayoffOn: Arg.Is(command.Info.ExternalClosedOn.ToDateTimeOffset()),
+            externalResettleOn: Arg.Is(DateTimeOffset.UnixEpoch),
+            bet: Arg.Is(command.Info.Bet.ToDecimal().GetValueOrDefault(0)),
+            validBet: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
+            settle: Arg.Is(command.Info.Settle.ToDecimal().GetValueOrDefault(0)),
+            commission: Arg.Is(0.0m),
+            turnover: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
+            winLoss: Arg.Is(command.Info.WinLoss.ToDecimal().GetValueOrDefault(0)),
+            additionalData: Arg.Is(command.Info.AdditionalData),
+            cancellationToken: Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -219,30 +228,33 @@ public class HandleRecordCommandServiceUnitTest
             gameRecordInfo,
             fakeClient);
 
-        await service
-            .ExecuteAsync(
-                command)
-            .ConfigureAwait(false);
+        await service.ExecuteAsync(command);
 
         await fakeClient
             .Received(1)
             .MessageAsync(
-                gameProviderCode: Arg.Is(gameRecordInfo.Value.GameProviderCode),
-                externalRoundId: Arg.Is(command.Info.ExternalRoundId),
-                externalGameId: Arg.Is(gameRecordInfo.Value.GameExternalId),
-                playerCode: Arg.Is(command.Info.PlayerCode),
-                status: Arg.Is(GameRecordStatus.Open),
-                clientStatus: Arg.Is(GameRecordClientStatus.Open),
-                externalCreatedOn: Arg.Is(command.Info.ExternalCreatedOn.ToDateTimeOffset()),
-                externalClosedOn: Arg.Is((DateTimeOffset?)null),
-                bet: Arg.Is(command.Info.Bet.ToDecimal().GetValueOrDefault(0)),
-                validBet: Arg.Is(command.Info.Bet.ToDecimal().GetValueOrDefault(0)),
-                settle: Arg.Is(command.Info.Settle.ToDecimal().GetValueOrDefault(0)),
-                commission: Arg.Is(0.0m),
-                turnover: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
-                playerWinLoss: Arg.Is(command.Info.WinLoss.ToDecimal().GetValueOrDefault(0)),
-                additionalData: Arg.Is(command.Info.AdditionalData),
-                cancellationToken: Arg.Any<CancellationToken>())
-            .ConfigureAwait(false);
+            gameProviderCode: Arg.Is(gameRecordInfo.Value.GameProviderCode),
+            playerCode: Arg.Is(command.Info.PlayerCode),
+            wagerState: Arg.Is(WagerStates.Running),
+            wagerType: Arg.Is(WagerTypes.Normal),
+            freeGameState: Arg.Is(FreeGameStates.None),
+            gambleState: Arg.Is(GambleStates.None),
+            cashoutState: Arg.Is(CashoutStates.None),
+            resettleState: Arg.Is(ResettleStates.None),
+            externalRoundId: Arg.Is(command.Info.ExternalRoundId),
+            externalWagerId: Arg.Is(command.Info.ExternalRoundId),
+            externalGameId: Arg.Is(gameRecordInfo.Value.GameExternalId),
+            externalCreatedOn: Arg.Is(command.Info.ExternalCreatedOn.ToDateTimeOffset()),
+            externalClosedOn: Arg.Is(command.Info.ExternalClosedOn.ToDateTimeOffset()),
+            externalPayoffOn: Arg.Is(command.Info.ExternalClosedOn.ToDateTimeOffset()),
+            externalResettleOn: Arg.Is(DateTimeOffset.UnixEpoch),
+            bet: Arg.Is(command.Info.Bet.ToDecimal().GetValueOrDefault(0)),
+            validBet: Arg.Is(command.Info.Bet.ToDecimal().GetValueOrDefault(0)),
+            settle: Arg.Is(command.Info.Settle.ToDecimal().GetValueOrDefault(0)),
+            commission: Arg.Is(0.0m),
+            turnover: Arg.Is(command.Info.Turnover.ToDecimal().GetValueOrDefault(0)),
+            winLoss: Arg.Is(command.Info.WinLoss.ToDecimal().GetValueOrDefault(0)),
+            additionalData: Arg.Is(command.Info.AdditionalData),
+            cancellationToken: Arg.Any<CancellationToken>());
     }
 }

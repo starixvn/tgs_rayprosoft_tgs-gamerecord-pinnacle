@@ -32,6 +32,7 @@ public static class ServiceCollectionExtensions
         .AddGameRoundsScheduleClient(gameRoundsScheduleClientOptions)
         .AddGameInterfacePinnacleClient(gameInterfacePinnacleClientOptions)
         .AddGameRecordHandleClient()
+        .AddTransient<IHangfireUtensil, HangfireUtensil>()
         .AddSingleton<IScheduleFormDispatcher, ScheduleFormDispatcher>()
         .AddSingleton<IScheduleFormLock>(sp => ActivatorUtilities.CreateInstance<ScheduleFormLock>(sp, sp.GetRequiredService<RedisConnectionManager>().Database));
 }
