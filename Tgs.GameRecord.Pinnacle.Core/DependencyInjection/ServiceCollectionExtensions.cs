@@ -1,9 +1,8 @@
 ﻿using System.Reflection;
-
+using StackExchange.Redis;
 using Tgs.GameCommand.Client;
 using Tgs.GameInterface.Pinnacle.Client;
 using Tgs.GameRecord.Pinnacle.Core;
-using Tgs.GameRounds.Schedule.Client;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -11,28 +10,17 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddGameRecordCore(
         this IServiceCollection services,
-        Action<RedisOptions, IServiceProvider> redisDBconfigure,
-        Action<GameRecordInfoOptions, IServiceProvider> gameRecordInfoOptions,
         Action<GameCommandClientOptions, IServiceProvider> gameCommandClientOptions,
-        Action<GameRoundsScheduleClientOptions, IServiceProvider> gameRoundsScheduleClientOptions,
-        Action<GameInterfacePinnacleClientOptions, IServiceProvider> gameInterfacePinnacleClientOptions)
+        Action<GameInterfacePinnacleClientOptions, IServiceProvider> gameInterfacePinnacleClientOptions,
+        Func<IServiceProvider, IDatabase> redisDatabaseResolver)
         => services
-        .AddOptions<RedisOptions>()
-        .Configure(redisDBconfigure)
-        .Services
-        .AddOptions<GameRecordInfoOptions>()
-        .Configure(gameRecordInfoOptions)
-        .Services
         .RegisterAllServiceUtilityTypes(
             Assembly.GetExecutingAssembly(),
             ServiceLifetime.Transient)
         .AddMemoryCache()
-        .AddSingleton<RedisConnectionManager>()
         .AddGameCommandClient(gameCommandClientOptions)
-        .AddGameRoundsScheduleClient(gameRoundsScheduleClientOptions)
         .AddGameInterfacePinnacleClient(gameInterfacePinnacleClientOptions)
         .AddGameRecordHandleClient()
         .AddTransient<IHangfireUtensil, HangfireUtensil>()
-        .AddSingleton<IScheduleFormDispatcher, ScheduleFormDispatcher>()
-        .AddSingleton<IScheduleFormLock>(sp => ActivatorUtilities.CreateInstance<ScheduleFormLock>(sp, sp.GetRequiredService<RedisConnectionManager>().Database));
+        .AddTransient<IHangfireLock>(sp => ActivatorUtilities.CreateInstance<HangfireLock>(sp, redisDatabaseResolver(sp)));
 }

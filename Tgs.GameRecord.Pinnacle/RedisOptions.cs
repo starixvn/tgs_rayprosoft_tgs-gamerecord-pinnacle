@@ -1,4 +1,5 @@
-﻿namespace Tgs.GameRecord.Pinnacle.Core;
+﻿using Tgs.GameRecord.Pinnacle.Core;
+namespace Tgs.GameRecord.Pinnacle;
 
 public record RedisOptions
 {

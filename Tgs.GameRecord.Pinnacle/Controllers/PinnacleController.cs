@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Tgs.GameRecord.Pinnacle.Core;
-using Tgs.GameRecord.Pinnacle.ViewModels;
-using Tgs.GameRounds.Schedule.Client;
-using Tgs.GameRounds.Schedule.Protos;
+﻿using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using Tgs.GameRecord.Pinnacle.Common;
+using Valhalla.MessageQueue;
 
 namespace Tgs.GameRecord.Pinnacle.Controllers;
 
@@ -11,18 +10,10 @@ namespace Tgs.GameRecord.Pinnacle.Controllers;
 [ApiController]
 public class PinnacleController : ControllerBase
 {
-    private readonly GameRecordInfoOptions _gameRecordInfo;
-
-    public PinnacleController(
-        IOptions<GameRecordInfoOptions> options)
-    {
-        _gameRecordInfo = options.Value;
-    }
-
     /// <summary>
-    /// Manuals the game record asynchronous.
+    /// Games the record manual asynchronous.
     /// </summary>
-    /// <param name="client">The client.</param>
+    /// <param name="messageSender">The message sender.</param>
     /// <param name="source">The source.</param>
     /// <returns></returns>
     /// <remarks>
@@ -39,26 +30,18 @@ public class PinnacleController : ControllerBase
     ///         }
     /// </remarks>
     [HttpPost("manual")]
-    public ValueTask ManualGameRecordAsync(
-        [FromServices] IGameRoundsScheduleClient client,
-        PinnacleViewModel source)
-        => client.Pinnacle_ScheduleFormQueuedAsync(
-             gameProviderCode: _gameRecordInfo.GameProviderCode,
-             name: source.AgentCode,
-             subject: "gp.gamerecord.scheduleform.pinnacle.queued",
-             source: ScheduleFormSource.Manual,
-             apiUrl: source.ApiUrl,
-             agentCode: source.AgentCode,
-             agentKey: source.AgentKey,
-             secretKey: source.SecretKey,
-             startTime: source.StartTime,
-             endTime: source.EndTime,
-             cancellationToken: HttpContext.RequestAborted);
+    public ValueTask GameRecordManualAsync(
+        [FromServices] IMessageSender messageSender,
+        PinnacleGameRecordMessage source)
+        => messageSender.PublishAsync(
+            subject: PinnacleNatsConst.ManualPublish,
+            data: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(source)),
+            cancellationToken: HttpContext.RequestAborted);
 
     /// <summary>
-    /// Schedules the game record asynchronous.
+    /// Games the record schedule asynchronous.
     /// </summary>
-    /// <param name="client">The client.</param>
+    /// <param name="messageSender">The message sender.</param>
     /// <param name="source">The source.</param>
     /// <returns></returns>
     /// <remarks>
@@ -75,19 +58,11 @@ public class PinnacleController : ControllerBase
     ///         }
     /// </remarks>
     [HttpPost("schedule")]
-    public ValueTask ScheduleGameRecordAsync(
-        [FromServices] IGameRoundsScheduleClient client,
-        PinnacleViewModel source)
-        => client.Pinnacle_ScheduleFormQueuedAsync(
-             gameProviderCode: _gameRecordInfo.GameProviderCode,
-             name: source.AgentCode,
-             subject: "gp.gamerecord.scheduleform.pinnacle.queued",
-             source: ScheduleFormSource.Schedule,
-             apiUrl: source.ApiUrl,
-             agentCode: source.AgentCode,
-             agentKey: source.AgentKey,
-             secretKey: source.SecretKey,
-             startTime: source.StartTime,
-             endTime: source.EndTime,
-             cancellationToken: HttpContext.RequestAborted);
+    public ValueTask GameRecordScheduleAsync(
+        [FromServices] IMessageSender messageSender,
+        PinnacleGameRecordMessage source)
+        => messageSender.PublishAsync(
+            subject: PinnacleNatsConst.SchedulePublish,
+            data: Encoding.UTF8.GetBytes(JsonSerializer.Serialize(source)),
+            cancellationToken: HttpContext.RequestAborted);
 }

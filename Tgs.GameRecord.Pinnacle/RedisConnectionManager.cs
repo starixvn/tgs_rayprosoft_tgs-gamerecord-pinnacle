@@ -2,7 +2,7 @@
 
 using StackExchange.Redis;
 
-namespace Tgs.GameRecord.Pinnacle.Core;
+namespace Tgs.GameRecord.Pinnacle;
 
 internal class RedisConnectionManager : IDisposable
 {
@@ -13,8 +13,7 @@ internal class RedisConnectionManager : IDisposable
 
     public RedisConnectionManager(IOptions<RedisOptions> optionsAccessor)
     {
-        if (optionsAccessor is null)
-            throw new ArgumentNullException(nameof(optionsAccessor));
+        ArgumentNullException.ThrowIfNull(optionsAccessor);
 
         var options = optionsAccessor.Value;
 
