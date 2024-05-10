@@ -11,7 +11,8 @@ data:
       "Logging": {
         "LogLevel": {
           "Default": "Warning",
-          "Tgs.GameRecord.Pinnacle.Messages": "Information"
+          "Tgs.GameRecord.Pinnacle.Messages": "Information",
+          "Tgs.GameRecord.Pinnacle.Core.ApplicationServices.HandleRecordCommandService": "Information"
         }
       },
       "GameRecord": {
