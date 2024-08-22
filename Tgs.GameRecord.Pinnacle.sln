@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Pinnacle.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Pinnacle.Core.UnitTest", "Tgs.GameRecord.Pinnacle.Core.UnitTest\Tgs.GameRecord.Pinnacle.Core.UnitTest.csproj", "{48B57384-DD79-4B84-8E7D-0586464132AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.GameRecord.Pinnacle.Common", "Tgs.GameRecord.Pinnacle.Common\Tgs.GameRecord.Pinnacle.Common.csproj", "{6BCDD096-ECC4-4FF9-A381-E37A4BEBD926}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameRecord.Pinnacle.Common", "Tgs.GameRecord.Pinnacle.Common\Tgs.GameRecord.Pinnacle.Common.csproj", "{6BCDD096-ECC4-4FF9-A381-E37A4BEBD926}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.GameRecord.Pinnacle.Repositories", "Tgs.GameRecord.Pinnacle.Repositories\Tgs.GameRecord.Pinnacle.Repositories.csproj", "{B7EAA0DC-EF9F-4D96-B079-BA4E8E0330AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{6BCDD096-ECC4-4FF9-A381-E37A4BEBD926}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BCDD096-ECC4-4FF9-A381-E37A4BEBD926}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BCDD096-ECC4-4FF9-A381-E37A4BEBD926}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7EAA0DC-EF9F-4D96-B079-BA4E8E0330AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7EAA0DC-EF9F-4D96-B079-BA4E8E0330AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7EAA0DC-EF9F-4D96-B079-BA4E8E0330AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7EAA0DC-EF9F-4D96-B079-BA4E8E0330AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
