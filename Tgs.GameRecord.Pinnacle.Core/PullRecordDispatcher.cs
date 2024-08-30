@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Tgs.GameRecord.Pinnacle.Core.ApplicationServices;
 
 namespace Tgs.GameRecord.Pinnacle.Core;
+
 internal class PullRecordDispatcher(IServiceProvider serviceProvider) : IPullRecordDispatcher, IDisposable, IAsyncDisposable
 {
 	private readonly ConcurrentDictionary<string, PullRecordChannel> _counters = new();

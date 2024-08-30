@@ -120,7 +120,8 @@ builder.Services
 		.AddHandler<ScheduleMessageHandler>(PinnacleNatsConst.SchedulePublish, PinnacleNatsConst.SchedulePublish)
 		.AddHandler<ManualMessageHandler>(PinnacleNatsConst.ManualPublish, PinnacleNatsConst.ManualPublish))
 	.ClearAllExchanges()
-	.AddNatsGlobPatternExchange("*");
+	.AddNatsGlobPatternExchange(PinnacleNatsConst.SchedulePublish)
+	.AddNatsGlobPatternExchange(PinnacleNatsConst.ManualPublish);
 
 builder.Services
 	.AddOpenTelemetry()
