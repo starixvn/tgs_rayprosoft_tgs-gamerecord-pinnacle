@@ -1,6 +1,7 @@
-﻿using Tgs.GameRecord.Pinnacle.Core.JobApplicationServices;
+﻿using Tgs.GameRecord.Pinnacle.Core;
+
+using Tgs.GameRecord.Pinnacle.Core.JobApplicationServices;
 using Tgs.ServiceUtility;
-using Tgs.GameRecord.Pinnacle.Core;
 
 namespace Tgs.GameRecord.Pinnacle.Repositories;
 

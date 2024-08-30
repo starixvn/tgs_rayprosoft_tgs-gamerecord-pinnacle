@@ -7,6 +7,7 @@ using Tgs.GameRecord.Pinnacle.Core.ApplicationServices;
 using Tgs.ServiceUtility;
 
 namespace Tgs.GameRecord.Pinnacle.Core;
+
 internal class PullRecordChannel(
 	ILogger<PullRecordChannel> logger,
 	IServiceProvider serviceProvider,
